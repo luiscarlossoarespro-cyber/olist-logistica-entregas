@@ -1,4 +1,6 @@
 dados/*.csv
 dados/*.zip
+dados/derivados/
 __pycache__/
 *.pyc
+sql_v1_backup/
