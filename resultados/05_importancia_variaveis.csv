@@ -1,0 +1,16 @@
+variavel,queda_pr_auc,desvio
+prazo_restante_na_postagem,0.31,0.0017
+dias_ate_postagem,0.0757,0.0023
+log_km,0.052,0.0022
+uf_cliente,0.0174,0.0015
+mes_do_ano,0.0166,0.0025
+log_frete,0.0105,0.0013
+mesma_uf,0.0091,0.0012
+dias_prometidos,0.0046,0.0007
+uf_vendedor,0.0012,0.001
+qtd_itens,0.001,0.001
+log_volume,0.0006,0.0009
+log_preco,0.0006,0.0002
+categoria_m,0.0005,0.0004
+log_peso,0.0001,0.0005
+dia_semana,-0.0005,0.0005

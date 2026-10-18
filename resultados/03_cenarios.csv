@@ -1,0 +1,3 @@
+cenario,pedidos_atrasados_evitados,pct_do_total_de_atrasos,queda_pontos_percentuais_no_atraso_geral,pct_pedidos_nas_UFs_alvo
+"Atraso nas UFs de maior atraso (AL, MA, PI, CE, SE, BA, RJ, PA, ES) cair ao nível das demais UFs",1602,24.5,1.66,22.6
+Eliminar atrasos longos (mais de 3 dias),4663,71.4,4.84,

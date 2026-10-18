@@ -1,0 +1,3 @@
+Treino: compras jan/2017 a mar/2018 (64019 pedidos, 7.98% atrasados)
+Teste: compras abr a ago/2018 (32150 pedidos, 4.42% atrasados)
+Melhor modelo (PR-AUC no teste): Gradient boosting

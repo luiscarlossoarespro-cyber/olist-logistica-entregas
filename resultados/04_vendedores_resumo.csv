@@ -1,0 +1,7 @@
+medida,valor
+vendedores com 50+ pedidos,419.0
+vendedores com atraso estatisticamente acima da média,59.0
+% dos pedidos (base total) desses vendedores,16.588891654222664
+% dos atrasos (base total) desses vendedores,28.026940150007654
+mediana de dias até postar - vendedores críticos,3.095925925925926
+mediana de dias até postar - demais vendedores 50+,1.9689641203703705

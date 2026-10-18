@@ -1,0 +1,11 @@
+p,r,aba
+Qual é a nossa taxa de entrega no prazo?,"93,2% dos pedidos chegam até o dia prometido. Os outros 6,8% atrasam (6.533 pedidos).",geral
+Qual rota mais gera atraso?,"SP → RJ: 8.156 pedidos, 14,1% atrasados. Sozinha, responde por 17,6% de todos os atrasos (1.152).",rotas
+Em que etapa perdemos mais tempo?,"No transporte. Pedidos atrasados ficaram em média 27,9 dias com a transportadora, contra 8,0 nos pedidos no prazo. Até a postagem: 6,1 contra 3,0 dias.",prazo
+Quais vendedores devo cobrar primeiro?,"59 vendedores atrasam acima da média com 95% de confiança (28,0% dos atrasos). Começar por 4a3ca9 (172 atrasos), 1f50f9 (124 atrasos), 4869f7 (118 atrasos).",vendedores
+Quanto o atraso custa em satisfação?,"A nota cai 2,02 pontos em média. Cerca de 3.391 notas 1 ou 2 a mais estão associadas ao atraso: 27,7% de todas as avaliações negativas.",satisfacao
+A promessa de prazo está correta?,"Em 12 UFs (AL, SE, RJ, MA, PA, CE, BA, PB, PI, RN, ES, SC) o prazo prometido fica abaixo do prazo em que 90% dos pedidos chegam (P90): risco de atraso. Em SP dá para prometer menos: 18,7 dias hoje contra um P90 real de 15,8.",rotas
+O que aconteceu na Black Friday de 2017?,"O atraso foi a 12,4%. A postagem subiu para 3,2 dias e o transporte para 8,8 (medianas), contra 2,3 e 7,0 em outubro.",geral
+Dá para prever quais pedidos vão atrasar?,"Sim. Os 10% de pedidos com maior risco concentram 49,5% dos atrasos: 21,9% deles atrasam, contra 1,6% na faixa de risco baixo.",risco
+Quem vende mais? E isso tem relação com atraso?,"O maior vendedor (4869f7, SP) faturou R$ 226.988 (1,72% do total) e está entre os vendedores críticos, com 10,5% de atraso: crescer sem logística aumenta o risco. Os 10 maiores somam 13,3% do faturamento.",vendas
+Quanto melhora se atacarmos as UFs de maior atraso?,"Se AL, MA, PI, CE, SE, BA, RJ, PA e ES tivessem o atraso das demais UFs, seriam 1.602 atrasos a menos (24,5% do total). Os atrasos longos (mais de 3 dias) são 71,4% dos atrasos.",rotas

@@ -1,0 +1,6 @@
+dias_atraso_faixa,pedidos_avaliados,nota_media,nota_mediana,pct_notas_1_ou_2,pedidos_total,pct_dos_pedidos
+No prazo ou adiantado,89406,4.29,5.0,9.22,89899,93.23
+Atraso de 1 a 3 dias,1852,3.29,4.0,32.18,1870,1.94
+Atraso de 4 a 7 dias,1747,2.1,1.0,67.6,1801,1.87
+Atraso de 8 a 14 dias,1446,1.67,1.0,80.08,1478,1.53
+Atraso de mais de 14 dias,1335,1.73,1.0,78.2,1384,1.44

@@ -1,0 +1,23 @@
+tabela,verificacao,ocorrencias,base,pct,decisao
+pedidos,pedidos duplicados (order_id repetido),0,99441,0.0,nenhuma ação necessária
+pedidos,pedidos com status 'entregue',96478,99441,97.02,universo da análise de atraso
+pedidos,entregue sem data de entrega ao cliente,8,96478,0.008,excluídos
+pedidos,entregue sem data de postagem,2,96478,0.002,excluídos
+pedidos,entregue sem data de aprovação,14,96478,0.015,excluídos
+pedidos,entregues com as 3 datas preenchidas (base utilizável),96455,96478,99.976,base analítica
+pedidos,aprovado antes da compra,0,96455,0.0,excluídos
+pedidos,postado antes da aprovação do pagamento,1350,96455,1.4,"mantidos; as etapas são medidas a partir da compra, então não geram tempo negativo"
+pedidos,entregue ao cliente antes da postagem,23,96455,0.024,excluídos (impossível fisicamente)
+pedidos,entrega demorou mais de 90 dias (compra até entrega),77,96455,0.08,"mantidos; são casos extremos reais, tratados com mediana e testes não paramétricos"
+pedidos,prazo prometido menor que 1 dia,0,96455,0.0,nenhuma ação necessária
+itens,itens por pedido: pedidos com mais de 1 vendedor,1278,98666,1.295,mantidos; vendedor de referência = o do primeiro item (menor order_item_id)
+itens,itens com frete zero,383,112650,0.34,mantidos
+produtos,produto sem categoria,610,32951,1.851,categoria 'sem_categoria'
+produtos,produto sem peso,2,32951,0.006,peso ausente (não imputado; usado só onde existe)
+produtos,produto com peso zero,4,32951,0.012,tratado como ausente
+avaliacoes,pedidos com mais de uma avaliação,547,98673,0.554,nota do pedido = média das notas
+avaliacoes,pedidos entregues sem nenhuma avaliação,646,96455,0.67,análises de nota usam só pedidos avaliados (possível viés de resposta)
+geo,linhas de geolocalização fora do retângulo do Brasil,31,1000163,0.003,excluídas antes de calcular o centro de cada prefixo de CEP
+geo,prefixos de CEP distintos na tabela de geolocalização,19015,19015,100.0,centro do prefixo = mediana de lat e lng
+clientes,clientes cujo prefixo de CEP não tem geolocalização,278,99441,0.28,distância ausente (pedido mantido nas demais análises)
+vendedores,vendedores cujo prefixo de CEP não tem geolocalização,7,3095,0.226,distância ausente (pedido mantido nas demais análises)

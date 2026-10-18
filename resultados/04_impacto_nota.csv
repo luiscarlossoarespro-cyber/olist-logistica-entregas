@@ -1,0 +1,9 @@
+medida,valor
+nota média - atrasados,2.271394984326019
+nota média - no prazo,4.290966676360274
+diferença (atrasados - no prazo),-2.019571692034255
+diferença IC95 inferior,-2.0588439898863693
+diferença IC95 superior,-1.9802993941821403
+Mann-Whitney p-valor,0.0
+regressão: queda na nota por atrasar (salto),-1.4553570300532013
+regressão: queda adicional por dia de atraso,-0.05529377972094946

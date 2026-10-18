@@ -1,0 +1,7 @@
+medida,valor
+vendedores com pelo menos 1 pedido entregue,2959.0
+vendedores com pelo menos 1 atraso,1273.0
+% dos vendedores que somam 50% dos atrasos,3.31
+% dos pedidos desses vendedores (50%),41.61
+% dos vendedores que somam 80% dos atrasos,13.45
+% dos pedidos desses vendedores (80%),69.28

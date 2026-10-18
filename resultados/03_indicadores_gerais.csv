@@ -1,0 +1,16 @@
+,valor
+pedidos,96432.0
+atrasados,6533.0
+pct_atraso,6.774722083955534
+ic95_inf,6.617820617680273
+ic95_sup,6.935067251713889
+pct_atraso_por_horario (definição antiga),8.11
+dias_total_mediana,10.217297453703704
+dias_total_media,12.55905540255002
+dias_prometidos_mediana,23.229565972222222
+dias_prometidos_media,23.73284628964221
+folga_mediana_dias,11.940815972222222
+nota_media,4.156449446335234
+pedidos_avaliados,95786.0
+mediana_distancia_km,433.860886657176
+pct_mesma_uf,35.96523975443836
