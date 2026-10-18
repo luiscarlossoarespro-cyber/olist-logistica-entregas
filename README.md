@@ -2,6 +2,15 @@
 
 Análise de dados de logística feita com **SQL (DuckDB) + Python**, sobre 96 mil pedidos reais entregues pela Olist entre 2016 e 2018.
 
+<p align="center">
+<a href="https://luiscarlossoarespro-cyber.github.io/"><img src="https://img.shields.io/badge/Portf%C3%B3lio-outros%20projetos-6fa8ff?style=for-the-badge" alt="Portfólio"></a>
+<a href="https://www.linkedin.com/in/luiscarlos-log/"><img src="https://img.shields.io/badge/LinkedIn-conectar-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>
+</p>
+
+**Demonstração em vídeo (1 min 35 s):**
+
+https://github.com/user-attachments/assets/cde6f633-c48f-4372-a8df-537284d6ce43
+
 **Pergunta de negócio:** quanto os pedidos atrasam, onde o tempo se perde e quanto o atraso custa em satisfação do cliente?
 
 ## Resultado em 30 segundos
