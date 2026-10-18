@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel de Entregas Olist</title>
+<meta name="description" content="Dashboard de logística: atraso de entregas, rotas, vendedores, vendas, satisfação e modelo de risco, com 96 mil pedidos reais da Olist.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{--bg:#f3f5f8;--card:#fff;--line:#e4e8ee;--line2:#eef1f5;--tx:#0f172a;--tx2:#475569;--tx3:#8b98ab;--navy:#0b1f3a;--navy2:#13294b;--blue:#2a78d6;--blue-l:#e8f1fc;--or:#eb6834;--or-l:#fdeee6;--green:#1a9e6e;--green-l:#e6f6ef;--gray:#cbd5e1}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+body{background:var(--bg);font:14px/1.45 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--tx);-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+header{background:var(--navy);color:#fff;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.hd{max-width:1680px;margin:0 auto;padding:14px 28px 0}
+.top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.logo{width:38px;height:38px;flex:none;border-radius:10px;background:linear-gradient(135deg,#6fa8ff,#b69cff);display:grid;place-items:center;font-weight:800;color:var(--navy)}
+.brand h1{font-size:19px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.brand p{font-size:12.5px;color:#a9b8cf}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.f{display:flex;flex-direction:column;gap:2px}
+.f label{font-size:10px;color:#8fa3c0;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.f select{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:9px;padding:7px 10px;color:#e6edf7;min-width:118px;cursor:pointer}
+.f select option{color:#0f172a}
+.btn-clear{background:none;border:1px solid rgba(255,255,255,.25);color:#cfe0f5;border-radius:9px;padding:7px 12px;cursor:pointer;font-size:12.5px}
+.btn-clear:hover{background:rgba(255,255,255,.08)}
+.tabs{display:flex;gap:2px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;border-bottom:3px solid transparent;color:#a9b8cf;padding:10px 14px;font-weight:600;font-size:13.5px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:#fff}
+.tab[aria-selected=true]{color:#fff;border-color:#6fa8ff}
+.chip-f{display:none;margin:0 auto;max-width:1680px;padding:8px 28px;font-size:12.5px;color:var(--tx2)}
+.chip-f.on{display:block}
+.chip-f b{color:var(--tx)}
+main{max-width:1680px;margin:0 auto;padding:18px 28px 30px}
+.page{display:none;gap:16px}
+.page.on{display:grid}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.kpis.k4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.k{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.k small{font-size:11.5px;color:var(--tx2);font-weight:600;display:block}
+.k b{display:block;font-size:28px;font-weight:800;letter-spacing:-.02em;margin-top:4px;font-variant-numeric:tabular-nums;line-height:1.1}
+.k span{display:block;font-size:11.5px;color:var(--tx3);margin-top:4px}
+.k.or{border-top:3px solid var(--or)} .k.gr{border-top:3px solid var(--green)} .k.bl{border-top:3px solid var(--blue)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g64{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}.g46{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-width:0}
+.card h3{font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card .s{font-size:12px;color:var(--tx3);margin:2px 0 10px}
+.tag{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:99px;background:var(--line2);color:var(--tx3)}
+.tag.live{background:var(--blue-l);color:var(--blue)}
+.ins{margin-top:10px;font-size:12.5px;color:var(--tx2);background:#f8fafc;border-left:3px solid var(--blue);padding:8px 10px;border-radius:6px}
+.ins.o{border-color:var(--or)}.ins.g{border-color:var(--green)}
+.ins b{color:var(--tx)}
+svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:inherit}
+.tbl-wrap{overflow:auto;max-height:520px;border:1px solid var(--line2);border-radius:10px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{position:sticky;top:0;background:#f8fafc;text-align:left;font-size:10.5px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;padding:8px 9px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:default}
+th.sort{cursor:pointer}th.sort:hover{color:var(--tx)}
+td{padding:7px 9px;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.n{text-align:right}
+tr:hover td{background:#fafbfd}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:11.5px;font-weight:700}
+.pill.o{background:var(--or-l);color:#b8461a}.pill.g{background:var(--green-l);color:#137a55}.pill.b{background:var(--blue-l);color:#1d5fae}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{background:#fff;border:0;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--tx2);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--navy);color:#fff}
+.search{border:1px solid var(--line);border-radius:9px;padding:6px 10px;font-size:12.5px;min-width:180px}
+.qa{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.q h4{font-size:14.5px;display:flex;gap:10px;align-items:flex-start}
+.q h4 i{font-style:normal;flex:none;width:26px;height:26px;border-radius:8px;background:var(--blue-l);color:var(--blue);display:grid;place-items:center;font-size:12.5px;font-weight:800}
+.q p{color:var(--tx2);font-size:13.5px;padding-left:36px}
+.q button{align-self:flex-start;margin-left:36px;background:none;border:0;color:var(--blue);font-weight:700;font-size:12.5px;cursor:pointer;padding:0}
+.rec{display:grid;gap:8px}
+.r{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 11px;border:1px solid var(--line);border-radius:10px}
+.r i{font-style:normal;width:26px;height:26px;border-radius:8px;background:var(--blue-l);color:var(--blue);display:grid;place-items:center;font-weight:800;font-size:12.5px}
+.r p{font-size:12.8px;line-height:1.35}
+.r em{font-style:normal;font-weight:800;color:var(--green);font-size:14.5px;white-space:nowrap;text-align:right}
+.r em small{display:block;font-size:10px;color:var(--tx3);font-weight:600}
+.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:11.5px;color:var(--tx2);margin-bottom:6px}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:var(--c);vertical-align:-1px}
+.list{font-size:13px;color:var(--tx2);padding-left:18px;display:grid;gap:6px}
+.list b{color:var(--tx)}
+#tip{position:fixed;pointer-events:none;z-index:50;background:var(--navy);color:#fff;font-size:12px;padding:7px 10px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;transition:opacity .1s;max-width:260px;line-height:1.4}
+#tip b{color:#9cc3f0}
+.hov{cursor:pointer}
+.hov:hover{opacity:.82}
+footer{max-width:1680px;margin:0 auto;padding:0 28px 26px;font-size:11.5px;color:var(--tx3);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+footer a{color:var(--tx2)}
+@media(max-width:1200px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.g3{grid-template-columns:minmax(0,1fr)}.g64,.g46{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){header{position:static}.hd,main,footer,.chip-f{padding-left:16px;padding-right:16px}.kpis,.kpis.k4{grid-template-columns:repeat(2,minmax(0,1fr))}.g2,.qa{grid-template-columns:minmax(0,1fr)}.brand h1{font-size:16px;white-space:normal}.f select{min-width:0}.k b{font-size:23px}}
+
+/* ---- movimento ---- */
+#progresso{position:fixed;top:0;left:0;height:3px;width:0;z-index:30;background:linear-gradient(90deg,#6fa8ff,#b69cff)}
+.rv{opacity:.45;transform:translateY(18px) scale(.99);transition:opacity .75s cubic-bezier(.16,.84,.3,1),transform .75s cubic-bezier(.16,.84,.3,1),box-shadow .3s;transition-delay:var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+.card,.k,.q{transition:transform .3s cubic-bezier(.16,.84,.3,1),box-shadow .3s}
+.card.in:hover,.k.in:hover,.q.in:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,.08)}
+.gv{transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0);transition:transform 1s cubic-bezier(.16,.84,.3,1);transition-delay:var(--gd,0s)}
+.gh{transform-box:fill-box;transform-origin:0 50%;transform:scaleX(0);transition:transform 1s cubic-bezier(.16,.84,.3,1);transition-delay:var(--gd,0s)}
+.gc{transform-box:fill-box;transform-origin:50% 50%;transform:scale(0);transition:transform .6s cubic-bezier(.34,1.56,.64,1);transition-delay:var(--gd,0s)}
+.gl{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.8s cubic-bezier(.45,.05,.25,1)}
+.gf{opacity:0;transition:opacity 1.2s .4s}
+.draw .gv,.draw .gh,.draw .gc{transform:none}.draw .gl{stroke-dashoffset:0}.draw .gf{opacity:1}
+.page.on{animation:pg .45s cubic-bezier(.16,.84,.3,1)}
+@keyframes pg{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.rv,.gv,.gh,.gc,.gl,.gf{transition:none!important;opacity:1!important;transform:none!important;stroke-dashoffset:0!important}.page.on{animation:none}}
+</style>
+</head>
+<body>
+<header><div class="hd">
+  <div class="top">
+    <div class="brand"><div class="logo">LC</div><div><h1>Desempenho de Entregas · E-commerce Brasil</h1><p>Onde e por que os pedidos atrasam · 96 mil pedidos reais da Olist · jan/2017 a ago/2018</p></div></div>
+    <div class="filters">
+      <div class="f"><label for="fIni">De</label><select id="fIni"></select></div>
+      <div class="f"><label for="fFim">Até</label><select id="fFim"></select></div>
+      <div class="f"><label for="fReg">Região</label><select id="fReg"></select></div>
+      <div class="f"><label for="fUf">UF do cliente</label><select id="fUf"></select></div>
+      <div class="f"><label for="fCat">Categoria</label><select id="fCat"></select></div>
+      <button class="btn-clear" id="limpar" type="button">Limpar filtros</button>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+</div></header>
+<div class="chip-f" id="chipf"></div>
+<main>
+
+<!-- VISÃO GERAL -->
+<section class="page on" id="p-geral">
+  <div class="kpis" id="kGeral"></div>
+  <div class="kpis" id="kGeral2"></div>
+  <div class="grid g64">
+    <div class="card"><h3>Tendência do atraso por mês <span class="tag live">filtrável</span></h3><div class="s">% de pedidos entregues depois do dia prometido · faixa = intervalo de confiança de 95%</div><div id="chTrend"></div><div class="ins o" id="insTrend"></div></div>
+    <div class="card"><h3>Atraso por UF do cliente <span class="tag live">filtrável</span></h3><div class="s">UFs com 30+ pedidos no filtro · laranja = acima da média geral com 95% de confiança</div><div id="chUf"></div></div>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h3>Destaques do recorte <span class="tag live">filtrável</span></h3><div class="s">Calculados automaticamente para os filtros escolhidos</div><ul class="list" id="destaques"></ul></div>
+    <div class="card"><h3>Para onde vai o prazo</h3><div class="s">Média de dias por etapa · no prazo x atrasou</div><div id="chEtapas"></div></div>
+    <div class="card"><h3>Plano de ação recomendado</h3><div class="s">Impacto estimado a partir dos dados (associação, não causa)</div><div class="rec" id="plano"></div></div>
+  </div>
+</section>
+
+<!-- PERGUNTAS -->
+<section class="page" id="p-perguntas">
+  <div class="card"><h3>Perguntas do gerente, respostas diretas</h3><div class="s">As perguntas que uma liderança de operação faria, respondidas com os números da análise (base completa). Clique para ver o detalhe.</div></div>
+  <div class="qa" id="qa"></div>
+</section>
+
+<!-- VENDAS -->
+<section class="page" id="p-vendas">
+  <div class="kpis" id="kVendas"></div>
+  <div class="grid g64">
+    <div class="card"><h3>Faturamento por mês <span class="tag live">filtrável</span></h3><div class="s">Soma do valor dos produtos em pedidos entregues (sem frete)</div><div id="chFat"></div></div>
+    <div class="card"><h3>Ranking de categorias <span class="tag live">filtrável</span></h3><div class="s">Faturamento no recorte · % de atraso de cada categoria</div><div id="chCat"></div></div>
+  </div>
+  <div class="grid g46">
+    <div class="card"><h3>Faturamento por UF do cliente <span class="tag live">filtrável</span></h3><div class="s">Onde estão as vendas · 10 maiores UFs</div><div id="chFatUf"></div></div>
+    <div class="card"><h3>Ranking de vendedores: quem vende mais e menos</h3><div class="s">Vendedores com 10+ pedidos entregues (base completa) · faturamento dos itens de cada vendedor</div>
+      <div class="tools"><div class="seg" id="segRank"><button type="button" aria-pressed="true" data-v="top">Mais vendem</button><button type="button" aria-pressed="false" data-v="bot">Menos vendem</button></div><input class="search" id="buscaRank" placeholder="Buscar vendedor, UF ou categoria"></div>
+      <div class="tbl-wrap"><table><thead><tr><th class="n">#</th><th>Vendedor</th><th>UF</th><th>Categoria principal</th><th class="n">Faturamento</th><th class="n">Pedidos</th><th class="n">Ticket médio</th><th class="n">Part.</th><th class="n">% atraso</th><th class="n">Nota</th></tr></thead><tbody id="tbRank"></tbody></table></div>
+      <div class="ins" id="insVendas"></div></div>
+  </div>
+</section>
+
+<!-- ROTAS -->
+<section class="page" id="p-rotas">
+  <div class="grid g2">
+    <div class="card"><h3>Mapa de rotas: origem x destino <span class="tag live">filtrável</span></h3><div class="s">% de atraso por UF do vendedor (linhas) e região do cliente (colunas) · células com 30+ pedidos</div><div id="chHeat"></div><div class="ins o" id="insHeat"></div></div>
+    <div class="card"><h3>Rotas críticas (UF a UF) <span class="tag">base completa</span></h3><div class="s">Rotas com 500+ pedidos, ordenadas por % de atraso</div><div class="tbl-wrap" style="max-height:380px"><table><thead><tr><th>Origem</th><th>Destino</th><th class="n">Pedidos</th><th class="n">% atraso</th><th class="n">Atrasos</th><th class="n">Prazo mediano</th></tr></thead><tbody id="tbRotas"></tbody></table></div></div>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h3>Chance de atraso por região (vs SP) <span class="tag">base completa</span></h3><div class="s">Regressão logística · mesma distância, peso, postagem e mês</div><div id="chOr"></div><div class="ins o">RJ e Nordeste: cerca de <b>3 vezes</b> a chance de SP, mesmo com distância igual.</div></div>
+    <div class="card"><h3>Transporte real x esperado pela distância <span class="tag">base completa</span></h3><div class="s">Quanto o transporte é mais lento (+) ou rápido (−) do que a distância explica</div><div id="chExc"></div></div>
+    <div class="card"><h3>Promessa x prazo real (P90) <span class="tag">base completa</span></h3><div class="s">Prazo prometido (mediana) e prazo em que 90% chegam · por UF</div><div class="leg"><span style="--c:var(--blue)">prometido</span><span style="--c:var(--or)">P90 real</span></div><div id="chProm"></div></div>
+  </div>
+</section>
+
+<!-- PRAZO -->
+<section class="page" id="p-prazo">
+  <div class="grid g2">
+    <div class="card"><h3>Média, mediana e P90 de cada etapa <span class="tag live">filtrável</span></h3><div class="s">Em dias · a média é puxada pelos casos extremos; a mediana mostra o pedido típico; o P90 é a base de um SLA</div><div class="tbl-wrap"><table><thead><tr><th>Etapa</th><th class="n">Média</th><th class="n">Mediana</th><th class="n">P90</th></tr></thead><tbody id="tbPerc"></tbody></table></div><div class="ins" id="insPerc"></div></div>
+    <div class="card"><h3>Composição do prazo por mês <span class="tag live">filtrável</span></h3><div class="s">Média de dias até a postagem e de transporte</div><div class="leg"><span style="--c:#8b5cf6">até a postagem</span><span style="--c:var(--blue)">transporte</span></div><div id="chComp"></div></div>
+  </div>
+  <div class="grid g3">
+    <div class="card"><h3>Alavanca: postagem x distância <span class="tag">base completa</span></h3><div class="s">Atraso previsto pelo modelo, com o resto constante</div><div class="leg"><span style="--c:var(--or)">dias até postar</span><span style="--c:var(--blue)">distância</span></div><div id="chAlav"></div><div class="ins">Postar em 1 dia (4,4%) contra 7 dias (10,0%) pesa mais que vender perto ou longe.</div></div>
+    <div class="card"><h3>Atraso por distância <span class="tag">base completa</span></h3><div class="s">Distância em linha reta vendedor-cliente</div><div id="chDist"></div></div>
+    <div class="card"><h3>Dia da semana da compra <span class="tag">base completa</span></h3><div class="s">Compras de quinta a sábado demoram mais a ser postadas</div><div id="chDia"></div></div>
+  </div>
+</section>
+
+<!-- VENDEDORES -->
+<section class="page" id="p-vendedores">
+  <div class="kpis k4" id="kVend"></div>
+  <div class="grid g46">
+    <div class="card"><h3>Curva de Pareto dos atrasos</h3><div class="s">% acumulado de atrasos x % acumulado de vendedores (ordenados por nº de atrasos)</div><div class="leg"><span style="--c:var(--or)">atrasos</span><span style="--c:var(--blue)">pedidos</span></div><div id="chPareto"></div><div class="ins" id="insPareto"></div></div>
+    <div class="card"><h3>Scorecard de vendedores <span class="tag">base completa</span></h3><div class="s">Vendedores com 50+ pedidos · crítico = atraso acima da média com 95% de confiança</div>
+      <div class="tools"><div class="seg" id="segVend"><button type="button" aria-pressed="true" data-v="crit">Só críticos</button><button type="button" aria-pressed="false" data-v="todos">Todos</button></div><input class="search" id="buscaVend" placeholder="Buscar vendedor ou UF"></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Vendedor</th><th>UF</th><th class="n sort" data-k="pedidos">Pedidos</th><th class="n sort" data-k="atrasados">Atrasos ▾</th><th class="n sort" data-k="pct_atraso">% atraso</th><th class="n">IC 95%</th><th class="n sort" data-k="postagem_mediana">Dias até postar</th><th class="n sort" data-k="nota">Nota</th></tr></thead><tbody id="tbVend"></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- SATISFAÇÃO -->
+<section class="page" id="p-satisfacao">
+  <div class="kpis k4" id="kSat"></div>
+  <div class="grid g2">
+    <div class="card"><h3>Nota do cliente por faixa de atraso <span class="tag live">filtrável</span></h3><div class="s">Nota média (1 a 5) e % de notas 1 ou 2</div><div id="chNota"></div><div class="ins o">A partir de 4 dias de atraso, a maioria dos clientes dá nota 1 ou 2.</div></div>
+    <div class="card"><h3>Categorias: atraso, prazo e nota <span class="tag live">filtrável</span></h3><div class="s">Ordenado por % de atraso</div><div class="tbl-wrap"><table><thead><tr><th>Categoria</th><th class="n">Pedidos</th><th class="n">% atraso</th><th class="n">Prazo médio</th><th class="n">Nota média</th><th class="n">% notas 1-2</th></tr></thead><tbody id="tbCat"></tbody></table></div></div>
+  </div>
+</section>
+
+<!-- RISCO -->
+<section class="page" id="p-risco">
+  <div class="kpis k4" id="kRisco"></div>
+  <div class="grid g3">
+    <div class="card"><h3>Curva de captura</h3><div class="s">Teste em abr a ago/2018, meses que o modelo não viu no treino</div><div id="chCap"></div></div>
+    <div class="card"><h3>Faixas de risco: previsto x real</h3><div class="s">% de pedidos que de fato atrasaram em cada faixa</div><div class="leg"><span style="--c:var(--gray)">risco previsto</span><span style="--c:var(--or)">atraso real</span></div><div id="chFaixa"></div><div class="ins g">O modelo está <b>bem calibrado</b>: o risco previsto fica perto do atraso real em cada faixa.</div></div>
+    <div class="card"><h3>O que mais pesa no risco</h3><div class="s">Queda de desempenho ao embaralhar cada variável</div><div id="chImp"></div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Comparação de modelos</h3><div class="s">Teste temporal · taxa base de atraso no teste: 4,4%</div><div class="tbl-wrap"><table><thead><tr><th>Modelo</th><th class="n">ROC-AUC</th><th class="n">PR-AUC</th><th class="n">Atrasos nos 10% de maior risco</th><th class="n">Precisão nos 10%</th></tr></thead><tbody id="tbMod"></tbody></table></div></div>
+    <div class="card"><h3>Como a operação usaria</h3><div class="s">Uso proposto no dia a dia</div><ul class="list"><li><b>Na postagem</b>, cada pedido recebe uma nota de risco usando só o que já se sabe (prazo restante, dias até postar, distância, UF, mês).</li><li><b>Risco alto</b> (10% do dia): acompanhamento ativo com a transportadora e aviso ao cliente.</li><li><b>Risco médio</b>: monitorar o rastreio. <b>Risco baixo</b>: fluxo normal.</li><li>Retreinar todo mês e acompanhar se o risco previsto continua perto do atraso real.</li></ul></div>
+  </div>
+</section>
+
+<!-- QUALIDADE -->
+<section class="page" id="p-qualidade">
+  <div class="grid g64">
+    <div class="card"><h3>Auditoria de qualidade dos dados</h3><div class="s">Verificações feitas antes de qualquer análise, com a decisão tomada em cada caso</div><div class="tbl-wrap"><table><thead><tr><th>Tabela</th><th>Verificação</th><th class="n">Ocorrências</th><th class="n">%</th><th>Decisão</th></tr></thead><tbody id="tbAud"></tbody></table></div></div>
+    <div class="card"><h3>Definições e método</h3><div class="s">Como ler os números</div><ul class="list">
+      <li><b>Atraso:</b> pedido entregue em dia posterior ao dia prometido. Comparar por horário inflaria o índice para 8,1%.</li>
+      <li><b>Etapas:</b> compra até a postagem (vendedor) e postagem até a entrega (transportadora).</li>
+      <li><b>Distância:</b> linha reta entre os centros dos prefixos de CEP do vendedor e do cliente.</li>
+      <li><b>IC 95%:</b> intervalo de Wilson. Diferença dentro do intervalo pode ser acaso.</li>
+      <li><b>Filtráveis:</b> blocos marcados mudam com os filtros. Os outros usam a base completa (modelos e testes estatísticos).</li>
+      <li><b>Limites:</b> associação não é causa; a base não traz transportadora, clima ou estoque; dados de 2016 a 2018.</li>
+      <li><b>Ferramentas:</b> SQL (DuckDB), Python (Pandas, SciPy, statsmodels, scikit-learn). Desenvolvido com apoio de IA (Claude).</li>
+    </ul>
+    <div class="ins">Código, SQL e relatório técnico: <a href="https://github.com/luiscarlossoarespro-cyber/olist-logistica-entregas" target="_blank" rel="noopener">github.com/luiscarlossoarespro-cyber/olist-logistica-entregas</a></div></div>
+  </div>
+</section>
+</main>
+<footer><span>Fonte: Olist Brazilian E-Commerce Public Dataset (Kaggle, CC BY-NC-SA 4.0). Uso não comercial.</span><span>Luis Carlos Machado Soares · <a href="https://www.linkedin.com/in/luiscarlos-log/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://luiscarlossoarespro-cyber.github.io/" target="_blank" rel="noopener">Portfólio</a></span></footer>
+<div id="tip" role="tooltip"></div><div id="progresso"></div>
+<script src="dados.js"></script>
+<script>
+(function(){
+"use strict";
+const D=window.DADOS, M=D.dims.meses, U=D.dims.ufs, CT=D.dims.cats, OR=D.dims.origs;
+const REG={AC:"Norte",AP:"Norte",AM:"Norte",PA:"Norte",RO:"Norte",RR:"Norte",TO:"Norte",AL:"Nordeste",BA:"Nordeste",CE:"Nordeste",MA:"Nordeste",PB:"Nordeste",PE:"Nordeste",PI:"Nordeste",RN:"Nordeste",SE:"Nordeste",DF:"Centro-Oeste",GO:"Centro-Oeste",MT:"Centro-Oeste",MS:"Centro-Oeste",SP:"Sudeste",MG:"Sudeste",ES:"Sudeste",RJ:"Sudeste",PR:"Sul",SC:"Sul",RS:"Sul"};
+const REGS=["Norte","Nordeste","Centro-Oeste","Sudeste","Sul"];
+const C={tx:"#0f172a",tx2:"#475569",tx3:"#8b98ab",grid:"#eef1f5",blue:"#2a78d6",or:"#eb6834",green:"#1a9e6e",gray:"#cbd5e1",violet:"#8b5cf6"};
+const MEDIA_GERAL=D.geral.pct_atraso;
+const $=id=>document.getElementById(id);
+const nf=(v,d=1)=>(v==null||isNaN(v))?"–":v.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const ni=v=>nf(v,0);
+const brl=(v,d=0)=>"R$ "+nf(v,d);
+const brlK=v=>v>=1e6?"R$ "+nf(v/1e6,2)+" mi":v>=1e3?"R$ "+nf(v/1e3,0)+" mil":brl(v);
+const mesLab=m=>m.slice(5)+"/"+m.slice(2,4);
+const NS="http://www.w3.org/2000/svg";
+function S(w,h){const s=document.createElementNS(NS,"svg");s.setAttribute("viewBox",`0 0 ${w} ${h}`);s.setAttribute("role","img");return s}
+function el(p,n,a){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);p.appendChild(e);return e}
+function tx(p,a,s){const t=el(p,"text",Object.assign({"font-size":11,fill:C.tx2},a));t.textContent=s;return t}
+function put(id,svg){const c=$(id);c.innerHTML="";c.appendChild(svg)}
+/* tooltip */
+const tip=$("tip");
+document.addEventListener("mousemove",e=>{const t=e.target.closest("[data-tip]");if(!t){tip.style.opacity=0;return}
+  tip.innerHTML=t.getAttribute("data-tip");tip.style.opacity=1;const x=Math.min(e.clientX+14,innerWidth-tip.offsetWidth-8),y=Math.min(e.clientY+14,innerHeight-tip.offsetHeight-8);tip.style.left=x+"px";tip.style.top=y+"px"});
+function wilson(k,n){if(!n)return[NaN,NaN];const z=1.96,p=k/n,d=1+z*z/n,c=(p+z*z/(2*n))/d,h=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n))/d;return[100*(c-h),100*(c+h)]}
+
+/* ---------- abas ---------- */
+const ABAS=[["geral","Visão geral"],["perguntas","Perguntas do gerente"],["vendas","Vendas"],["rotas","Regiões e rotas"],["prazo","Prazo e operação"],["vendedores","Vendedores"],["satisfacao","Satisfação"],["risco","Risco de atraso"],["qualidade","Qualidade e método"]];
+$("tabs").innerHTML=ABAS.map(([k,l],i)=>`<button class="tab" role="tab" type="button" data-k="${k}" aria-selected="${i===0}">${l}</button>`).join("");
+function abrir(k){document.querySelectorAll(".tab").forEach(b=>b.setAttribute("aria-selected",b.dataset.k===k));document.querySelectorAll(".page").forEach(p=>p.classList.toggle("on",p.id==="p-"+k));try{history.replaceState(null,"","#"+k)}catch(e){};scrollTo({top:0});if(typeof resetPagina==="function")resetPagina("p-"+k)}
+$("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)abrir(b.dataset.k)});
+window.abrirAba=abrir;
+
+/* ---------- filtros ---------- */
+const F={ini:0,fim:M.length-1,reg:"",uf:-1,cat:-1};
+const opt=(v,l,sel)=>`<option value="${v}"${sel?" selected":""}>${l}</option>`;
+$("fIni").innerHTML=M.map((m,i)=>opt(i,mesLab(m),i===0)).join("");
+$("fFim").innerHTML=M.map((m,i)=>opt(i,mesLab(m),i===M.length-1)).join("");
+$("fReg").innerHTML=opt("","Todas",1)+REGS.map(r=>opt(r,r)).join("");
+function fillUf(){$("fUf").innerHTML=opt(-1,"Todas",1)+U.map((u,i)=>(!F.reg||REG[u]===F.reg)?opt(i,u,i===F.uf):"").join("")}
+fillUf();
+$("fCat").innerHTML=opt(-1,"Todas",1)+CT.map((c,i)=>opt(i,c)).join("");
+$("fIni").onchange=e=>{F.ini=+e.target.value;if(F.ini>F.fim){F.fim=F.ini;$("fFim").value=F.fim}render()};
+$("fFim").onchange=e=>{F.fim=+e.target.value;if(F.fim<F.ini){F.ini=F.fim;$("fIni").value=F.ini}render()};
+$("fReg").onchange=e=>{F.reg=e.target.value;if(F.uf>=0&&F.reg&&REG[U[F.uf]]!==F.reg)F.uf=-1;fillUf();render()};
+$("fUf").onchange=e=>{F.uf=+e.target.value;render()};
+$("fCat").onchange=e=>{F.cat=+e.target.value;render()};
+$("limpar").onclick=()=>{Object.assign(F,{ini:0,fim:M.length-1,reg:"",uf:-1,cat:-1});$("fIni").value=0;$("fFim").value=M.length-1;$("fReg").value="";fillUf();$("fCat").value=-1;render()};
+const passa=(r,o={})=>r[0]>=F.ini&&r[0]<=F.fim&&(o.semUf||((F.uf<0||r[1]===F.uf)&&(!F.reg||REG[U[r[1]]]===F.reg)))&&(o.semCat||F.cat<0||r[2]===F.cat);
+function soma(rows){const a=new Array(33).fill(0);rows.forEach(r=>{for(let i=3;i<33;i++)a[i]+=r[i]});return a}
+function histQ(nome,rows){const h={};rows.forEach(r=>{const l=D.hist[nome][r[0]+"|"+r[1]+"|"+r[2]];if(l)l.forEach(([d,q])=>{h[d]=(h[d]||0)+q})});
+  const ks=Object.keys(h).map(Number).sort((a,b)=>a-b),N=ks.reduce((s,k)=>s+h[k],0);
+  const q=p=>{if(!N)return NaN;const alvo=p*N;let acc=0;for(const k of ks){if(acc+h[k]>=alvo)return (k+(alvo-acc)/h[k])/4;acc+=h[k]}return (ks[ks.length-1]+1)/4};return{p50:q(.5),p90:q(.9)}}
+
+/* ---------- gráficos genéricos ---------- */
+function hbar(id,itens,o={}){ // itens: [{l,v,cor,tip,lab}]
+  const W=o.w||560,rh=o.rh||19,L=o.L||40,R=o.R||52,H=itens.length*rh+8,max=o.max||Math.max(...itens.map(i=>i.v))*1.05||1;
+  const s=S(W,H+(o.ref!=null?14:0));
+  itens.forEach((it,i)=>{const y=4+i*rh,w=Math.max(0,it.v/max*(W-L-R));
+    tx(s,{x:L-6,y:y+rh*.62,"text-anchor":"end","font-weight":it.bold?800:600,fill:it.bold?C.tx:C.tx2},it.l);
+    el(s,"rect",{x:L,y:y+2,width:w,height:rh-6,rx:3,fill:it.cor||C.blue,class:"hov gh",style:`--gd:${(i*0.03).toFixed(2)}s`,"data-tip":it.tip||""});
+    tx(s,{x:L+w+5,y:y+rh*.62,"font-size":11.5,fill:C.tx},it.lab!=null?it.lab:nf(it.v))});
+  if(o.ref!=null){const x=L+o.ref/max*(W-L-R);el(s,"line",{x1:x,x2:x,y1:0,y2:H,stroke:C.tx3,"stroke-dasharray":"4 4"});tx(s,{x:x,y:H+11,"text-anchor":"middle","font-size":11,fill:C.tx3},o.refLab||"")}
+  put(id,s)}
+function vbar(id,itens,o={}){ // itens: [{l,v,cor,tip,lab,sub}]
+  const W=o.w||560,H=o.h||230,B=H-(o.sub?44:28),T=22,L=10,n=itens.length,gw=(W-2*L)/n,bw=Math.min(o.bw||70,gw*.62),max=o.max||Math.max(...itens.map(i=>i.v))*1.1||1;
+  const s=S(W,H);el(s,"line",{x1:L,x2:W-L,y1:B,y2:B,stroke:C.gray});
+  itens.forEach((it,i)=>{const x=L+i*gw+(gw-bw)/2,h=it.v/max*(B-T);
+    el(s,"rect",{x:x,y:B-h,width:bw,height:h,rx:4,fill:it.cor||C.blue,class:"hov gv",style:`--gd:${(i*0.06).toFixed(2)}s`,"data-tip":it.tip||""});
+    tx(s,{x:x+bw/2,y:B-h-6,"text-anchor":"middle","font-size":12,"font-weight":800,fill:C.tx},it.lab!=null?it.lab:nf(it.v));
+    tx(s,{x:x+bw/2,y:B+15,"text-anchor":"middle","font-size":11.5},it.l);
+    if(it.sub)tx(s,{x:x+bw/2,y:B+31,"text-anchor":"middle","font-size":11.5,"font-weight":700,fill:it.subCor||C.tx3},it.sub)});
+  put(id,s)}
+function linha(id,pts,o={}){ // pts:[{x:label,y,lo,hi,tip}]
+  const W=o.w||900,H=o.h||270,L=42,R=16,T=14,B=H-26,n=pts.length,maxY=o.max||Math.max(5,...pts.map(p=>p.hi||p.y))*1.12;
+  const X=i=>L+(n>1?i*(W-L-R)/(n-1):(W-L-R)/2),Y=v=>B-v/maxY*(B-T);const s=S(W,H);
+  const step=maxY>30?10:maxY>12?5:2;for(let v=0;v<=maxY;v+=step){el(s,"line",{x1:L,x2:W-R,y1:Y(v),y2:Y(v),stroke:C.grid});tx(s,{x:L-7,y:Y(v)+4,"text-anchor":"end","font-size":11.5,fill:C.tx3},(o.fmtY||(v=>v+"%"))(v))}
+  const pul=Math.ceil(n/10);pts.forEach((p,i)=>{if(i%pul===0)tx(s,{x:X(i),y:B+17,"text-anchor":"middle","font-size":11.5,fill:C.tx3},p.x)});
+  if(pts[0]&&pts[0].lo!=null&&n>1)el(s,"path",{d:pts.map((p,i)=>(i?"L":"M")+X(i)+" "+Y(p.hi)).join("")+pts.slice().reverse().map((p,j)=>"L"+X(n-1-j)+" "+Y(p.lo)).join("")+"Z",fill:"rgba(42,120,214,.13)",class:"gf"});
+  if(o.ref!=null){el(s,"line",{x1:L,x2:W-R,y1:Y(o.ref),y2:Y(o.ref),stroke:C.tx3,"stroke-dasharray":"5 5"});tx(s,{x:W-R,y:Y(o.ref)-5,"text-anchor":"end","font-size":11.5,fill:C.tx2},o.refLab)}
+  if(n>1)el(s,"path",{d:pts.map((p,i)=>(i?"L":"M")+X(i)+" "+Y(p.y)).join(""),fill:"none",stroke:o.cor||C.blue,"stroke-width":2.5,"stroke-linejoin":"round",pathLength:1,class:"gl"});
+  pts.forEach((p,i)=>{el(s,"circle",{cx:X(i),cy:Y(p.y),r:3.5,fill:o.cor||C.blue,class:"gc",style:`--gd:${(0.2+1.5*i/Math.max(n-1,1)).toFixed(2)}s`});el(s,"rect",{x:X(i)-(W-L-R)/(2*Math.max(n-1,1)),y:T,width:(W-L-R)/Math.max(n-1,1),height:B-T,fill:"transparent","data-tip":p.tip||""})});
+  (o.marcas||[]).forEach(([i,t])=>{if(i<0||i>=n)return;el(s,"circle",{cx:X(i),cy:Y(pts[i].y),r:7,fill:"none",stroke:C.or,"stroke-width":2.5});tx(s,{x:X(i)-11,y:Y(pts[i].y)-5,"text-anchor":"end","font-size":11.5,"font-weight":700,fill:C.tx},t)});
+  put(id,s)}
+
+/* ---------- render filtrável ---------- */
+function chip(){const p=[];if(F.ini>0||F.fim<M.length-1)p.push(`período <b>${mesLab(M[F.ini])} a ${mesLab(M[F.fim])}</b>`);if(F.reg)p.push(`região <b>${F.reg}</b>`);if(F.uf>=0)p.push(`UF <b>${U[F.uf]}</b>`);if(F.cat>=0)p.push(`categoria <b>${CT[F.cat]}</b>`);
+  const c=$("chipf");c.classList.toggle("on",p.length>0);c.innerHTML=p.length?"Filtros ativos: "+p.join(" · ")+" — blocos marcados como <b>filtrável</b> foram recalculados.":""}
+function kcard(t,v,s,cls){return `<div class="k ${cls||""}"><small>${t}</small><b${cls==="or"?' style="color:var(--or)"':""}>${v}</b><span>${s}</span></div>`}
+
+function render(){
+  chip();
+  const rows=D.cubo.filter(r=>passa(r)),a=soma(rows),n=a[3];
+  const pct=n?100*a[4]/n:NaN,[lo,hi]=wilson(a[4],n);
+  const ht=histQ("total",rows),htr=histQ("transporte",rows),hpo=histQ("postagem",rows);
+  const nn=a.slice(18,23).reduce((x,y)=>x+y,0),sn=a.slice(23,28).reduce((x,y)=>x+y,0),bx=a.slice(28,33).reduce((x,y)=>x+y,0);
+  /* KPIs */
+  $("kGeral").innerHTML=[
+    kcard("Pedidos entregues",ni(n),"no recorte selecionado","bl"),
+    kcard("Entregas no prazo (OTD)",nf(100-pct)+"%","chegaram até o dia prometido","gr"),
+    kcard("Entregas com atraso",nf(pct)+"%",`IC 95%: ${nf(lo)}% a ${nf(hi)}% · ${ni(a[4])} pedidos`,"or"),
+    kcard("Atrasos longos (+3 dias)",nf(100*a[5]/n)+"%",`${nf(100*a[5]/Math.max(a[4],1),0)}% dos atrasos`),
+    kcard("Prazo total",nf(a[6]/n)+" d",`média · mediana ${nf(ht.p50)} d · P90 ${nf(ht.p90)} d`),
+    kcard("Prazo prometido",nf(a[7]/n)+" d",`média · folga de ${nf((a[7]-a[6])/n)} dias`)].join("");
+  $("kGeral2").innerHTML=[
+    kcard("Até a postagem",nf(a[8]/n)+" d",`média · mediana ${nf(hpo.p50)} d · P90 ${nf(hpo.p90)} d`),
+    kcard("Transporte",nf(a[9]/n)+" d",`média · mediana ${nf(htr.p50)} d · P90 ${nf(htr.p90)} d`),
+    kcard("Nota média do cliente",nf(sn/nn,2),`${ni(nn)} pedidos avaliados`),
+    kcard("Notas 1 ou 2",nf(100*bx/nn)+"%","avaliações negativas"),
+    kcard("Faturamento",brlK(a[11]),`ticket médio ${brl(a[11]/n,2)}`),
+    kcard("Frete sobre o valor",nf(100*a[10]/a[11])+"%",`frete médio ${brl(a[10]/n,2)} · ${nf(a[12]/n,2)} itens/pedido`)].join("");
+  /* tendência */
+  const pm={};D.cubo.filter(r=>passa(r)).forEach(r=>{const p=pm[r[0]]||(pm[r[0]]={n:0,a:0,s:0,t:0,po:0,tr:0});p.n+=r[3];p.a+=r[4];p.s+=r[11];p.po+=r[8];p.tr+=r[9]});
+  const ms=Object.keys(pm).map(Number).sort((x,y)=>x-y);
+  const pts=ms.map(i=>{const p=pm[i],[l,h]=wilson(p.a,p.n);return{x:mesLab(M[i]),y:100*p.a/p.n,lo:l,hi:h,tip:`<b>${mesLab(M[i])}</b><br>${nf(100*p.a/p.n)}% atrasados<br>${ni(p.a)} de ${ni(p.n)} pedidos`}});
+  const marcas=[];const iBF=ms.indexOf(M.indexOf("2017-11")),iMar=ms.indexOf(M.indexOf("2018-03"));
+  if(iBF>=0&&pm[ms[iBF]].n>=200)marcas.push([iBF,"Black Friday · "+nf(pts[iBF].y)+"%"]);if(iMar>=0&&pm[ms[iMar]].n>=200)marcas.push([iMar,"mar/18 · "+nf(pts[iMar].y)+"%"]);
+  linha("chTrend",pts,{h:330,ref:pct,refLab:"média do recorte "+nf(pct)+"%",marcas:marcas});
+  if(pts.length){const pior=pts.reduce((x,y)=>y.y>x.y?y:x),melhor=pts.reduce((x,y)=>y.y<x.y?y:x);$("insTrend").innerHTML=`Pior mês: <b>${pior.x} (${nf(pior.y)}%)</b> · melhor: <b>${melhor.x} (${nf(melhor.y)}%)</b>. Nos picos de nov/17 e fev a mar/18, o transporte subiu de cerca de 7 para 9 a 11 dias (mediana).`}
+  /* UF */
+  const pu={};D.cubo.filter(r=>passa(r,{semUf:true})&&(!F.reg||REG[U[r[1]]]===F.reg)).forEach(r=>{const p=pu[r[1]]||(pu[r[1]]={n:0,a:0});p.n+=r[3];p.a+=r[4]});
+  const ufI=Object.keys(pu).map(Number).filter(i=>pu[i].n>=30).map(i=>{const p=pu[i],v=100*p.a/p.n,[l,h]=wilson(p.a,p.n);return{l:U[i],v:v,bold:i===F.uf,cor:l>MEDIA_GERAL?C.or:C.blue,lab:nf(v)+"%",tip:`<b>${U[i]}</b> · ${nf(v)}% atraso<br>IC 95%: ${nf(l)}% a ${nf(h)}%<br>${ni(p.n)} pedidos`}}).sort((x,y)=>y.v-x.v);
+  hbar("chUf",ufI,{w:560,rh:ufI.length>20?17.5:20,L:34,ref:MEDIA_GERAL,refLab:"média geral "+nf(MEDIA_GERAL)+"%"});
+  /* destaques */
+  const des=[];if(ufI.length){des.push(`UF com mais atraso: <b>${ufI[0].l} (${ufI[0].lab})</b>; com menos: <b>${ufI[ufI.length-1].l} (${ufI[ufI.length-1].lab})</b>.`)}
+  des.push(`<b>${nf(100*a[5]/Math.max(a[4],1),0)}%</b> dos atrasos passam de 3 dias, justamente os que mais derrubam a nota.`);
+  des.push(`Metade dos pedidos chega em até <b>${nf(ht.p50)} dias</b>; 90% em até <b>${nf(ht.p90)} dias</b>. A promessa média é de <b>${nf(a[7]/n)} dias</b>.`);
+  const cats=catAgg();if(cats.length){const pc=cats.filter(c=>c.n>=100).sort((x,y)=>y.pct-x.pct)[0];if(pc)des.push(`Categoria com mais atraso (100+ pedidos): <b>${pc.l} (${nf(pc.pct)}%)</b>.`)}
+  des.push(`Clientes que receberam no prazo deram nota <b>${nf(a[23]/Math.max(a[18],1),2)}</b>; com atraso acima de 7 dias, <b>${nf((a[26]+a[27])/Math.max(a[21]+a[22],1),2)}</b>.`);
+  $("destaques").innerHTML=des.map(d=>`<li>${d}</li>`).join("");
+  /* vendas */
+  $("kVendas").innerHTML=[kcard("Faturamento",brlK(a[11]),"produtos em pedidos entregues","bl"),kcard("Pedidos",ni(n),`${nf(a[12]/n,2)} itens por pedido`),kcard("Ticket médio",brl(a[11]/n,2),"por pedido (média)"),kcard("Frete total",brlK(a[10]),`${nf(100*a[10]/a[11])}% do valor dos produtos`),kcard("Vendedores ativos",ni(D.resumo_vendas.vendedores_total),"base completa"),kcard("10 maiores vendedores",nf(D.resumo_vendas.top10_participacao)+"%","do faturamento (base completa)","or")].join("");
+  vbar("chFat",ms.map(i=>({l:mesLab(M[i]),v:pm[i].s/1e3,cor:C.blue,lab:"",tip:`<b>${mesLab(M[i])}</b><br>${brl(pm[i].s)}<br>${ni(pm[i].n)} pedidos · ticket ${brl(pm[i].s/pm[i].n,2)}`})),{w:900,h:250,bw:30});
+  const cv=cats.slice().sort((x,y)=>y.s-x.s);
+  hbar("chCat",cv.map(c=>({l:c.l,v:c.s,bold:CT.indexOf(c.l)===F.cat,cor:C.blue,lab:brlK(c.s)+" · "+nf(c.pct)+"% atraso",tip:`<b>${c.l}</b><br>${brl(c.s)} · ${ni(c.n)} pedidos<br>ticket ${brl(c.s/c.n,2)} · ${nf(c.pct)}% atraso`})),{w:560,rh:22,L:150,R:150});
+  const fu={};D.cubo.filter(r=>passa(r,{semUf:true})&&(!F.reg||REG[U[r[1]]]===F.reg)).forEach(r=>{const p=fu[r[1]]||(fu[r[1]]={n:0,s:0});p.n+=r[3];p.s+=r[11]});
+  const fuI=Object.keys(fu).map(Number).map(i=>({l:U[i],v:fu[i].s,bold:i===F.uf,cor:C.blue,lab:brlK(fu[i].s),tip:`<b>${U[i]}</b><br>${brl(fu[i].s)} · ${ni(fu[i].n)} pedidos<br>ticket ${brl(fu[i].s/fu[i].n,2)}`})).sort((x,y)=>y.v-x.v).slice(0,10);
+  hbar("chFatUf",fuI,{w:560,rh:24,L:34,R:80});
+  /* rotas heatmap */
+  heat();
+  /* prazo */
+  $("tbPerc").innerHTML=[["Compra até a postagem",a[8]/n,hpo],["Transporte",a[9]/n,htr],["Prazo total (compra até entrega)",a[6]/n,ht]].map(([l,m,h])=>`<tr><td>${l}</td><td class="n">${nf(m)}</td><td class="n"><b>${nf(h.p50)}</b></td><td class="n">${nf(h.p90)}</td></tr>`).join("")+`<tr><td>Prazo prometido</td><td class="n">${nf(a[7]/n)}</td><td class="n">–</td><td class="n">–</td></tr>`;
+  $("insPerc").innerHTML=`A média do transporte (<b>${nf(a[9]/n)} d</b>) fica acima da mediana (<b>${nf(htr.p50)} d</b>): poucos pedidos muito demorados puxam a média para cima. Um SLA honesto deveria usar o <b>P90 (${nf(ht.p90)} dias)</b> do prazo total.`;
+  const comp=ms.map(i=>({l:mesLab(M[i]),po:pm[i].po/pm[i].n,tr:pm[i].tr/pm[i].n}));
+  (function(){const W=900,H=250,B=222,T=16,L=10,n2=comp.length,gw=(W-2*L)/Math.max(n2,1),bw=Math.min(30,gw*.6),max=Math.max(...comp.map(c=>c.po+c.tr),1)*1.12,s=S(W,H);
+    el(s,"line",{x1:L,x2:W-L,y1:B,y2:B,stroke:C.gray});const pul=Math.ceil(n2/10);
+    comp.forEach((c,i)=>{const x=L+i*gw+(gw-bw)/2,h1=c.po/max*(B-T),h2=c.tr/max*(B-T),tp=`<b>${c.l}</b><br>até a postagem: ${nf(c.po)} d<br>transporte: ${nf(c.tr)} d<br>total: ${nf(c.po+c.tr)} d`;
+      el(s,"rect",{x:x,y:B-h1,width:bw,height:h1,fill:C.violet,class:"hov gv",style:`--gd:${(i*0.04).toFixed(2)}s`,"data-tip":tp});el(s,"rect",{x:x,y:B-h1-h2-2,width:bw,height:h2,rx:3,fill:C.blue,class:"hov gv",style:`--gd:${(0.3+i*0.04).toFixed(2)}s`,"data-tip":tp});
+      if(i%pul===0)tx(s,{x:x+bw/2,y:B+15,"text-anchor":"middle","font-size":11.5,fill:C.tx3},c.l)});put("chComp",s)})();
+  /* satisfação */
+  const FX=["No prazo","1 a 3 dias","4 a 7 dias","8 a 14 dias","+ de 14 dias"];
+  $("kSat").innerHTML=[kcard("Nota média",nf(sn/nn,2),`${ni(nn)} avaliações no recorte`,"bl"),kcard("Nota quando chega no prazo",nf(a[23]/Math.max(a[18],1),2),"média","gr"),kcard("Nota quando atrasa",nf((sn-a[23])/Math.max(nn-a[18],1),2),"média","or"),kcard("Notas 1 ou 2 associadas ao atraso",ni(D.notas_baixas[3].valor),nf(D.notas_baixas[5].valor)+"% das avaliações negativas (base completa)")].join("");
+  vbar("chNota",FX.map((l,i)=>{const v=a[23+i]/Math.max(a[18+i],1),b=100*a[28+i]/Math.max(a[18+i],1);return{l:l,v:v,cor:i?C.or:C.green,lab:a[18+i]?nf(v,2):"–",sub:a[18+i]?nf(b,0)+"% nota 1-2":"",subCor:i?C.or:C.tx3,tip:`<b>${l}</b><br>nota média ${nf(v,2)}<br>${nf(b,0)}% deram nota 1 ou 2<br>${ni(a[18+i])} avaliações`}}),{w:560,h:250,max:5,sub:true});
+  if(typeof redesenhar==="function")setTimeout(redesenhar,0);
+  $("tbCat").innerHTML=cats.filter(c=>c.n>=30).sort((x,y)=>y.pct-x.pct).map(c=>`<tr><td>${c.l}</td><td class="n">${ni(c.n)}</td><td class="n"><span class="pill ${c.pct>MEDIA_GERAL?"o":"b"}">${nf(c.pct)}%</span></td><td class="n">${nf(c.t)} d</td><td class="n">${nf(c.nota,2)}</td><td class="n">${nf(c.baixa)}%</td></tr>`).join("");
+}
+function catAgg(){const pc={};D.cubo.filter(r=>passa(r,{semCat:true})).forEach(r=>{const p=pc[r[2]]||(pc[r[2]]={n:0,a:0,s:0,t:0,nn:0,sn:0,b:0});p.n+=r[3];p.a+=r[4];p.s+=r[11];p.t+=r[6];for(let i=0;i<5;i++){p.nn+=r[18+i];p.sn+=r[23+i];p.b+=r[28+i]}});
+  return Object.keys(pc).map(Number).map(i=>{const p=pc[i];return{l:CT[i],n:p.n,s:p.s,pct:100*p.a/p.n,t:p.t/p.n,nota:p.sn/Math.max(p.nn,1),baixa:100*p.b/Math.max(p.nn,1)}})}
+function heat(){
+  const cel={};D.rotas.filter(r=>passa(r)).forEach(r=>{const k=r[3]+"|"+REG[U[r[1]]],p=cel[k]||(cel[k]={n:0,a:0});p.n+=r[4];p.a+=r[5]});
+  const W=620,cw=96,rh=40,L=78,T=30,s=S(W,T+OR.length*rh+10);
+  REGS.forEach((g,j)=>tx(s,{x:L+j*cw+cw/2,y:18,"text-anchor":"middle","font-size":11,"font-weight":700,fill:C.tx2},g));
+  let pior=null;
+  OR.forEach((o,i)=>{tx(s,{x:L-10,y:T+i*rh+rh/2+4,"text-anchor":"end","font-size":11.5,"font-weight":700,fill:C.tx2},o==="Outras"?"Outras UFs":o);
+    REGS.forEach((g,j)=>{const p=cel[i+"|"+g],x=L+j*cw,y=T+i*rh;
+      if(!p||p.n<30){el(s,"rect",{x:x+2,y:y+2,width:cw-4,height:rh-4,rx:6,fill:"#f8fafc"});tx(s,{x:x+cw/2,y:y+rh/2+4,"text-anchor":"middle","font-size":11.5,fill:C.gray},p?"<30":"–");return}
+      const v=100*p.a/p.n,t=Math.min(1,v/18),cor=`rgba(235,104,52,${0.08+0.85*t})`;
+      if(!pior||v>pior.v)pior={v:v,o:o,g:g,n:p.n};
+      el(s,"rect",{x:x+2,y:y+2,width:cw-4,height:rh-4,rx:6,fill:cor,class:"hov gc",style:`--gd:${((i+j)*0.05).toFixed(2)}s`,"data-tip":`<b>${o} → ${g}</b><br>${nf(v)}% atrasados<br>${ni(p.a)} de ${ni(p.n)} pedidos`});
+      tx(s,{x:x+cw/2,y:y+rh/2+4,"text-anchor":"middle","font-size":12,"font-weight":800,fill:t>.55?"#fff":C.tx},nf(v)+"%")})});
+  put("chHeat",s);
+  $("insHeat").innerHTML=pior?`Rota com mais atraso no recorte: <b>${pior.o} → ${pior.g} (${nf(pior.v)}%, ${ni(pior.n)} pedidos)</b>. Na base completa, a rota UF a UF mais crítica é <b>SP → RJ</b>: 8.156 pedidos e cerca de 18% de todos os atrasos.`:"Sem dados suficientes no recorte."}
+
+/* ---------- blocos fixos (base completa) ---------- */
+function fixos(){
+  /* perguntas */
+  $("qa").innerHTML=D.perguntas.map((q,i)=>`<div class="q"><h4><i>${i+1}</i>${q.p}</h4><p>${q.r}</p><button type="button" onclick="abrirAba('${q.aba}')">Ver detalhe →</button></div>`).join("");
+  /* plano */
+  const vr=D.vendedores_resumo,fx=D.faixas_risco,cen=D.cenarios;
+  $("plano").innerHTML=[["Monitorar todo dia os 10% de pedidos com maior risco (modelo)",nf(fx[0].pct_dos_atrasos)+"%","dos atrasos"],["Meta de postagem em até 2 dias para os "+ni(vr[1].valor)+" vendedores críticos",nf(vr[3].valor,0)+"%","dos atrasos"],["Plano com a transportadora para a rota SP → RJ","~18%","dos atrasos"],["Rever prazos e rotas das UFs de maior atraso (Nordeste, RJ, PA, ES)","-"+ni(cen[0].pedidos_atrasados_evitados),"atrasos"]].map((r,i)=>`<div class="r"><i>${i+1}</i><p>${r[0]}</p><em>${r[1]}<small>${r[2]}</small></em></div>`).join("");
+  /* etapas */
+  const et=D.etapas;vbar("chEtapas",[{l:"Até postar · no prazo",v:et[0].ate_postagem_media,cor:"#c4b5fd",lab:nf(et[0].ate_postagem_media)+" d"},{l:"Até postar · atrasou",v:et[1].ate_postagem_media,cor:C.violet,lab:nf(et[1].ate_postagem_media)+" d"},{l:"Transporte · no prazo",v:et[0].transporte_media,cor:"#9cc3f0",lab:nf(et[0].transporte_media)+" d"},{l:"Transporte · atrasou",v:et[1].transporte_media,cor:C.or,lab:nf(et[1].transporte_media)+" d"}].map(x=>Object.assign(x,{tip:`<b>${x.l}</b><br>${x.lab} em média`,l:x.l.split(" · ")[1],sub:x.l.split(" · ")[0],subCor:C.tx2})),{w:560,h:240,sub:true,bw:60});
+  /* rotas críticas */
+  $("tbRotas").innerHTML=D.top_rotas.map(r=>`<tr><td>${r.uf_vendedor}</td><td>${r.uf_cliente}</td><td class="n">${ni(r.pedidos)}</td><td class="n"><span class="pill ${r.pct_atraso>MEDIA_GERAL?"o":"b"}">${nf(r.pct_atraso)}%</span></td><td class="n">${ni(Math.round(r.pedidos*r.pct_atraso/100))}</td><td class="n">${nf(r.dias_total_mediana)} d</td></tr>`).join("");
+  /* odds ratio */
+  const rg=D.regressao.filter(r=>r.variavel&&r.variavel.startsWith("região")||r.Unnamed&&0);
+  const orr=D.regressao.filter(r=>(r[""]||r.variavel||r["Unnamed: 0"]||"").toString().startsWith("região")).map(r=>({l:(r[""]||r.variavel||r["Unnamed: 0"]).replace("região: ","").replace("Sudeste (MG e ES)","MG e ES"),v:r.odds_ratio,lo:r.or_ic95_inf,hi:r.or_ic95_sup})).sort((x,y)=>y.v-x.v);
+  (function(){const W=540,L=100,R=520,X=v=>L+(v-0.8)/(3.6-0.8)*(R-L),s=S(W,262);
+    [1,2,3].forEach(v=>{el(s,"line",{x1:X(v),x2:X(v),y1:0,y2:226,stroke:v===1?C.tx3:C.grid,"stroke-dasharray":v===1?"4 4":""});tx(s,{x:X(v),y:242,"text-anchor":"middle","font-size":11.5,fill:C.tx3},v+"x"+(v===1?" (SP)":""))});
+    orr.forEach((o,i)=>{const y=18+i*36;tx(s,{x:L-10,y:y+4,"text-anchor":"end","font-size":11.5,fill:C.tx2,"font-weight":600},o.l);
+      el(s,"line",{x1:X(o.lo),x2:X(o.hi),y1:y,y2:y,stroke:C.tx2,"stroke-width":2});el(s,"circle",{cx:X(o.v),cy:y,r:6.5,fill:o.v>2.5?C.or:C.blue,class:"hov gc",style:`--gd:${(i*0.1).toFixed(2)}s`,"data-tip":`<b>${o.l}</b><br>${nf(o.v,2)}x a chance de SP<br>IC 95%: ${nf(o.lo,2)} a ${nf(o.hi,2)}`});
+      tx(s,{x:X(o.hi)+8,y:y+4,"font-size":11,"font-weight":700,fill:C.tx},nf(o.v,2)+"x")});put("chOr",s)})();
+  /* transporte vs esperado */
+  const ex=D.transporte_esperado.slice().sort((x,y)=>y.pct_acima_do_esperado-x.pct_acima_do_esperado);
+  (function(){const W=540,rh=20,mid=250,sc=6,s=S(W,ex.length*rh+10);el(s,"line",{x1:mid,x2:mid,y1:0,y2:ex.length*rh+6,stroke:C.tx3});
+    ex.forEach((e,i)=>{const v=e.pct_acima_do_esperado,y=4+i*rh,w=Math.abs(v)*sc;tx(s,{x:mid-(v>0?6:w+6),y:y+13,"text-anchor":"end","font-size":11.5,"font-weight":600},e.uf_cliente);
+      el(s,"rect",{x:v>0?mid:mid-w,y:y+2,width:w,height:rh-6,rx:3,fill:v>0?C.or:C.blue,class:"hov gh",style:`--gd:${(i*0.03).toFixed(2)}s;transform-origin:${v>0?"0":"100%"} 50%`,"data-tip":`<b>${e.uf_cliente}</b><br>transporte real ${nf(e.transporte_mediana)} d · esperado ${nf(e.esperado_mediana)} d<br>${v>0?"+":""}${nf(v,0)}% vs esperado`});
+      tx(s,{x:v>0?mid+w+4:mid+4,y:y+13,"font-size":11,fill:C.tx},(v>0?"+":"")+nf(v,0)+"%")});put("chExc",s)})();
+  /* promessa x p90 */
+  const pp=D.promessa_p90.slice().sort((x,y)=>x.diferenca_promessa_menos_sugerido-y.diferenca_promessa_menos_sugerido);
+  (function(){const W=540,rh=20,L=34,R=520,X=v=>L+v/42*(R-L),s=S(W,pp.length*rh+26);
+    [0,10,20,30,40].forEach(v=>{el(s,"line",{x1:X(v),x2:X(v),y1:0,y2:pp.length*rh+4,stroke:C.grid});tx(s,{x:X(v),y:pp.length*rh+18,"text-anchor":"middle","font-size":11,fill:C.tx3},v+" d")});
+    pp.forEach((p,i)=>{const y=8+i*rh,risco=p.diferenca_promessa_menos_sugerido<0;tx(s,{x:L-6,y:y+4,"text-anchor":"end","font-size":11.5,"font-weight":600,fill:risco?C.or:C.tx2},p.uf_cliente);
+      el(s,"line",{x1:X(p.prometido_mediana),x2:X(p.real_p90),y1:y,y2:y,stroke:risco?"#f6b89c":C.gray,"stroke-width":3});
+      const tp=`<b>${p.uf_cliente}</b><br>prometido (mediana): ${nf(p.prometido_mediana)} d<br>P90 real: ${nf(p.real_p90)} d<br>${risco?"promessa abaixo do P90: risco de atraso":"promessa acima do P90: dá para prometer menos"}`;
+      el(s,"circle",{cx:X(p.prometido_mediana),cy:y,r:4.5,fill:C.blue,class:"hov gc",style:`--gd:${(i*0.03).toFixed(2)}s`,"data-tip":tp});el(s,"circle",{cx:X(p.real_p90),cy:y,r:4.5,fill:C.or,class:"hov gc",style:`--gd:${(0.3+i*0.03).toFixed(2)}s`,"data-tip":tp})});put("chProm",s)})();
+  /* alavancas, distância, dia */
+  vbar("chAlav",D.efeitos.map(e=>({l:e.cenario.replace("postagem em ","").replace("distância de ",""),v:e.pct_atraso_previsto,cor:e.cenario.startsWith("postagem")?C.or:C.blue,lab:nf(e.pct_atraso_previsto)+"%",tip:`<b>${e.cenario}</b><br>atraso previsto ${nf(e.pct_atraso_previsto)}%`})),{w:560,h:220,bw:48});
+  vbar("chDist",D.distancia.map(d=>({l:d.faixa_km.replace(" km","").replace("mais de ","+").replace("até ","≤"),v:d.pct_atraso,cor:C.blue,lab:nf(d.pct_atraso)+"%",tip:`<b>${d.faixa_km}</b><br>${nf(d.pct_atraso)}% atraso · ${ni(d.pedidos)} pedidos<br>transporte mediano ${nf(d.mediana_transporte)} d`})),{w:560,h:220,bw:52});
+  vbar("chDia",D.dia_semana.map(d=>({l:d.dia.slice(0,3),v:d.postagem_media,cor:d.postagem_media>3.3?C.violet:"#c4b5fd",lab:nf(d.postagem_media)+" d",tip:`<b>${d.dia}</b><br>até a postagem: ${nf(d.postagem_media)} d (média)<br>${nf(d.pct_atraso)}% atraso · ${ni(d.pedidos)} pedidos`})),{w:560,h:220,bw:48});
+  /* vendedores */
+  const pr=D.pareto;
+  $("kVend").innerHTML=[kcard("Vendedores com 50+ pedidos",ni(vr[0].valor),"avaliados com teste estatístico","bl"),kcard("Vendedores críticos",ni(vr[1].valor),"atraso acima da média com 95% de confiança","or"),kcard("Participação nos atrasos",nf(vr[3].valor)+"%",`com ${nf(vr[2].valor)}% dos pedidos`),kcard("Dias até postar (mediana)",nf(vr[4].valor)+" d",`críticos · demais: ${nf(vr[5].valor)} d`)].join("");
+  const pc=D.pareto_curva;(function(){const W=540,L=44,R=525,T=10,B=230,X=v=>L+v/100*(R-L),Y=v=>B-v/100*(B-T),s=S(W,262);
+    [0,25,50,75,100].forEach(v=>{el(s,"line",{x1:L,x2:R,y1:Y(v),y2:Y(v),stroke:C.grid});tx(s,{x:L-6,y:Y(v)+4,"text-anchor":"end","font-size":11.5,fill:C.tx3},v+"%");tx(s,{x:X(v),y:B+16,"text-anchor":"middle","font-size":11.5,fill:C.tx3},v+"%")});
+    tx(s,{x:(L+R)/2,y:B+32,"text-anchor":"middle","font-size":11.5},"% acumulado de vendedores");
+    el(s,"path",{d:pc.map((p,i)=>(i?"L":"M")+X(p.pct_vendedores)+" "+Y(p.pct_pedidos)).join(""),fill:"none",stroke:C.blue,"stroke-width":2.2,pathLength:1,class:"gl"});
+    el(s,"path",{d:pc.map((p,i)=>(i?"L":"M")+X(p.pct_vendedores)+" "+Y(p.pct_atrasos)).join(""),fill:"none",stroke:C.or,"stroke-width":2.8,pathLength:1,class:"gl"});
+    const x50=pr[2].valor;el(s,"circle",{cx:X(x50),cy:Y(50),r:5,fill:C.or,class:"hov","data-tip":`<b>${nf(x50)}% dos vendedores</b><br>somam 50% dos atrasos<br>e ${nf(pr[3].valor)}% dos pedidos`});
+    tx(s,{x:X(x50)+10,y:Y(50)+16,"font-size":11.5,"font-weight":700,fill:C.tx},nf(x50)+"% dos vendedores = 50% dos atrasos");put("chPareto",s)})();
+  $("insPareto").innerHTML=`<b>${nf(pr[2].valor)}%</b> dos vendedores somam metade dos atrasos, mas também <b>${nf(pr[3].valor)}%</b> dos pedidos: a concentração acompanha o volume. Por isso a lista de críticos usa a <b>taxa</b> de atraso com teste estatístico, não só o número de atrasos.`;
+  tabVend();
+  /* risco */
+  const md=D.modelo,gb=md.find(m=>m.modelo==="Gradient boosting");
+  $("kRisco").innerHTML=[kcard("Atrasos capturados",nf(fx[0].pct_dos_atrasos)+"%","monitorando 10% dos pedidos","gr"),kcard("Atraso na faixa de risco alto",nf(fx[0].pct_atraso_real)+"%",`contra ${nf(fx[2].pct_atraso_real)}% na faixa baixa`,"or"),kcard("ROC-AUC",nf(gb.roc_auc,2),"0,5 = acaso · 1 = perfeito"),kcard("Ganho sobre o acaso",nf(gb.top10_precisao_pct/gb.taxa_base_teste_pct,1)+"x","precisão nos 10% de maior risco","bl")].join("");
+  const cc=D.curva_captura;(function(){const W=540,L=44,R=525,T=10,B=230,X=v=>L+v/100*(R-L),Y=v=>B-v/100*(B-T),s=S(W,262);
+    [0,25,50,75,100].forEach(v=>{el(s,"line",{x1:L,x2:R,y1:Y(v),y2:Y(v),stroke:C.grid});tx(s,{x:L-6,y:Y(v)+4,"text-anchor":"end","font-size":11.5,fill:C.tx3},v+"%");tx(s,{x:X(v),y:B+16,"text-anchor":"middle","font-size":11.5,fill:C.tx3},v+"%")});
+    tx(s,{x:(L+R)/2,y:B+32,"text-anchor":"middle","font-size":11.5},"% dos pedidos monitorados (maior risco primeiro)");
+    el(s,"line",{x1:X(0),y1:Y(0),x2:X(100),y2:Y(100),stroke:C.gray,"stroke-width":2,"stroke-dasharray":"6 6"});
+    el(s,"path",{d:"M"+X(0)+" "+Y(0)+cc.map(p=>"L"+X(p.pct_pedidos_monitorados)+" "+Y(p.pct_atrasos_capturados)).join(""),fill:"none",stroke:C.or,"stroke-width":3,pathLength:1,class:"gl"});
+    cc.forEach(p=>el(s,"circle",{cx:X(p.pct_pedidos_monitorados),cy:Y(p.pct_atrasos_capturados),r:6,fill:"transparent","data-tip":`monitorando <b>${nf(p.pct_pedidos_monitorados,0)}%</b><br>captura ${nf(p.pct_atrasos_capturados)}% dos atrasos`}));
+    el(s,"circle",{cx:X(10),cy:Y(fx[0].pct_dos_atrasos),r:6,fill:C.or});tx(s,{x:X(10)+12,y:Y(fx[0].pct_dos_atrasos)+20,"font-size":11.5,"font-weight":800,fill:C.tx},"10% monitorados = "+nf(fx[0].pct_dos_atrasos)+"% dos atrasos");tx(s,{x:X(62),y:Y(52),"font-size":11.5,fill:C.tx3},"sem modelo");put("chCap",s)})();
+  (function(){const W=540,H=240,B=200,T=20,s=S(W,H),gw=170,max=26;el(s,"line",{x1:10,x2:530,y1:B,y2:B,stroke:C.gray});
+    fx.forEach((f,i)=>{const x=30+i*gw,h1=f.risco_medio_previsto/max*(B-T),h2=f.pct_atraso_real/max*(B-T);
+      el(s,"rect",{x:x,y:B-h1,width:52,height:h1,rx:4,fill:C.gray,class:"hov gv",style:`--gd:${(i*0.15).toFixed(2)}s`,"data-tip":`<b>${f.faixa}</b><br>risco previsto ${nf(f.risco_medio_previsto)}%`});el(s,"rect",{x:x+58,y:B-h2,width:52,height:h2,rx:4,fill:C.or,class:"hov gv",style:`--gd:${(0.1+i*0.15).toFixed(2)}s`,"data-tip":`<b>${f.faixa}</b><br>atraso real ${nf(f.pct_atraso_real)}%<br>${ni(f.atrasados)} de ${ni(f.pedidos)} pedidos`});
+      tx(s,{x:x+26,y:B-h1-6,"text-anchor":"middle","font-size":11,"font-weight":700,fill:C.tx2},nf(f.risco_medio_previsto)+"%");tx(s,{x:x+84,y:B-h2-6,"text-anchor":"middle","font-size":12,"font-weight":800,fill:C.tx},nf(f.pct_atraso_real)+"%");
+      tx(s,{x:x+55,y:B+16,"text-anchor":"middle","font-size":11.5,"font-weight":700},f.faixa.split(" (")[0]);tx(s,{x:x+55,y:B+30,"text-anchor":"middle","font-size":11,fill:C.tx3},"("+f.faixa.split(" (")[1])});put("chFaixa",s)})();
+  const NOMES={prazo_restante_na_postagem:"Prazo restante na postagem",dias_ate_postagem:"Dias até postar",log_km:"Distância",uf_cliente:"UF do cliente",mes_do_ano:"Mês do ano",log_frete:"Frete",mesma_uf:"Mesma UF",dias_prometidos:"Prazo prometido",qtd_itens:"Itens no pedido",uf_vendedor:"UF do vendedor",categoria_m:"Categoria",log_volume:"Volume",dia_semana:"Dia da semana",log_peso:"Peso",log_preco:"Preço"};
+  const im=D.importancia.filter(i=>i.queda_pr_auc>0.001).slice(0,8);
+  hbar("chImp",im.map(i=>({l:NOMES[i.variavel]||i.variavel,v:i.queda_pr_auc,cor:C.blue,lab:nf(i.queda_pr_auc,3),tip:`<b>${NOMES[i.variavel]||i.variavel}</b><br>queda de PR-AUC: ${nf(i.queda_pr_auc,3)}`})),{w:540,rh:26,L:170,R:50});
+  $("tbMod").innerHTML=md.map(m=>`<tr><td>${m.modelo}</td><td class="n">${nf(m.roc_auc,3)}</td><td class="n">${nf(m.pr_auc,3)}</td><td class="n">${nf(m.top10_pct_dos_atrasos_capturados)}%</td><td class="n">${nf(m.top10_precisao_pct)}%</td></tr>`).join("");
+  /* auditoria */
+  $("tbAud").innerHTML=D.auditoria.map(r=>`<tr><td>${r.tabela}</td><td style="white-space:normal;min-width:220px">${r.verificacao}</td><td class="n">${ni(r.ocorrencias)}</td><td class="n">${r.pct==null?"–":nf(r.pct,2)}</td><td style="white-space:normal;min-width:240px;color:#64748b">${r.decisao}</td></tr>`).join("");
+  tabRank();
+}
+/* tabelas interativas */
+let modoRank="top",modoVend="crit",ordVend="atrasados";
+function tabRank(){const q=($("buscaRank").value||"").toLowerCase();let l=D.ranking_vendedores.slice();if(modoRank==="bot")l.reverse();
+  l=l.filter(v=>!q||(v.id+" "+v.uf+" "+v.cat).toLowerCase().includes(q)).slice(0,50);
+  $("tbRank").innerHTML=l.map(v=>`<tr><td class="n">${v.posicao}º</td><td>Vendedor ${v.id}</td><td>${v.uf||"–"}</td><td>${v.cat}</td><td class="n"><b>${brl(v.receita)}</b></td><td class="n">${ni(v.pedidos)}</td><td class="n">${brl(v.ticket,2)}</td><td class="n">${nf(v.participacao,2)}%</td><td class="n"><span class="pill ${v.pct_atraso>MEDIA_GERAL?"o":"g"}">${nf(v.pct_atraso)}%</span></td><td class="n">${nf(v.nota,2)}</td></tr>`).join("");
+  const rv=D.ranking_vendedores,t=rv[0];$("insVendas").innerHTML=modoRank==="top"?`O 1º colocado (<b>${t.id}</b>) fatura ${brl(t.receita)} com <b>${nf(t.pct_atraso)}% de atraso</b>, acima da média: crescer sem logística aumenta o risco. Os 20% maiores vendedores somam <b>${nf(D.resumo_vendas.top20pct_participacao)}%</b> do faturamento.`:`Mostrando os menores entre os ${ni(rv.length)} vendedores com 10+ pedidos. Ticket baixo e pouco volume: candidatos a programas de desenvolvimento de vendedores.`}
+$("segRank").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;modoRank=b.dataset.v;$("segRank").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));tabRank()});
+$("buscaRank").addEventListener("input",tabRank);
+function tabVend(){const q=($("buscaVend").value||"").toLowerCase();let l=D.vendedores.filter(v=>(modoVend==="todos"||v.acima_da_media)&&(!q||(v.id+" "+v.uf).toLowerCase().includes(q)));
+  l.sort((x,y)=>(y[ordVend]||0)-(x[ordVend]||0));
+  $("tbVend").innerHTML=l.slice(0,120).map(v=>`<tr><td>Vendedor ${v.id}${v.acima_da_media?' <span class="pill o">crítico</span>':""}</td><td>${v.uf||"–"}</td><td class="n">${ni(v.pedidos)}</td><td class="n">${ni(v.atrasados)}</td><td class="n"><b>${nf(v.pct_atraso)}%</b></td><td class="n" style="color:#64748b">${nf(v.ic95_inf)}–${nf(v.ic95_sup)}%</td><td class="n">${nf(v.postagem_mediana)}</td><td class="n">${nf(v.nota,2)}</td></tr>`).join("")}
+$("segVend").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;modoVend=b.dataset.v;$("segVend").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));tabVend()});
+$("buscaVend").addEventListener("input",tabVend);
+document.querySelectorAll("#p-vendedores th.sort").forEach(th=>th.addEventListener("click",()=>{ordVend=th.dataset.k;document.querySelectorAll("#p-vendedores th.sort").forEach(t=>t.textContent=t.textContent.replace(" ▾",""));th.textContent+=" ▾";tabVend()}));
+
+
+/* ---------- movimento: revelar na rolagem, desenhar gráficos, contar números ---------- */
+const RED=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function contar(b){if(RED||b.dataset.ct)return;const alvo=b.textContent;const m=alvo.match(/-?[\d.]+(,\d+)?/);if(!m)return;b.dataset.ct=1;
+  const txt=m[0],dec=(txt.split(",")[1]||"").length,val=parseFloat(txt.replace(/\./g,"").replace(",",".")),pre=alvo.slice(0,m.index),pos=alvo.slice(m.index+txt.length);
+  const t0=performance.now(),dur=900*(window.__lento||1);(function f(){const t=performance.now(),k=Math.max(0,Math.min(1,(t-t0)/dur)),e=1-Math.pow(1-k,4);b.textContent=pre+nf(val*e,dec)+pos;if(k<1)requestAnimationFrame(f);else{b.textContent=alvo;delete b.dataset.ct}})()}
+const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const c=e.target;c.classList.add("in");setTimeout(()=>c.classList.add("draw"),120);c.querySelectorAll(".k b").forEach(contar);if(c.matches(".k"))contar(c.querySelector("b"));io.unobserve(c)}}),{threshold:.12,rootMargin:"0px 0px -6% 0px"}):null;
+function preparar(raiz){const els=(raiz||document).querySelectorAll(".page.on .card,.page.on .k,.page.on .q");let i=0;
+  els.forEach(c=>{if(c.classList.contains("in"))return;c.classList.add("rv");c.style.setProperty("--d",((i++%6)*0.06).toFixed(2)+"s");if(io&&!RED)io.observe(c);else c.classList.add("in","draw")})}
+function redesenhar(){if(RED)return;document.querySelectorAll(".page.on .card.in").forEach(c=>{c.classList.remove("draw");void c.offsetWidth;requestAnimationFrame(()=>c.classList.add("draw"))});
+  document.querySelectorAll(".page.on .k.in b").forEach(contar)}
+function resetPagina(id){document.querySelectorAll("#"+id+" .card,#"+id+" .k,#"+id+" .q").forEach(c=>{c.classList.remove("in","draw");if(io)io.unobserve(c)});preparar()}
+window.resetPagina=resetPagina;
+addEventListener("scroll",()=>{const h=document.documentElement;$("progresso").style.width=(100*scrollY/Math.max(1,h.scrollHeight-innerHeight))+"%"},{passive:true});
+fixos();render();preparar();
+const h=(location.hash||"").slice(1);if(ABAS.some(a=>a[0]===h))abrir(h);
+})();
+</script>
+</body>
+</html>
