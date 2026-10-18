@@ -201,7 +201,7 @@ O script roda todas as etapas em ordem e recria `resultados/`, `graficos/`, o re
 
 ```
 sql/          base analítica em SQL (DuckDB)
-src/          etapas do projeto em Python (01 a 07) e rodar_tudo.py
+src/          etapas do projeto em Python (01 a 10) e rodar_tudo.py
 resultados/   todas as tabelas geradas (CSV)
 graficos/     gráficos do relatório (PNG)
 docs/         relatório técnico e dicionário de dados
